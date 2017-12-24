@@ -1,0 +1,8 @@
+simple controller for fluidsynth
+
+On launch, starts jackd and fluidsynth and connects to fluidsyth.
+It has 8 selectable drums and program controll for channel 0
+
+Drums are activated by GUI buttons or by keyboard keys 1-8.
+
+On exit, kills fluidsynth and jack to free alsa for pulseaduio.
