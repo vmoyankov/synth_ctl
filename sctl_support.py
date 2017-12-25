@@ -9,6 +9,7 @@ import os
 import sys
 import subprocess
 import time
+import re
 
 import pypm
 
@@ -326,6 +327,23 @@ def start_synth():
             stderr=DEVNULL)
     time.sleep(1)
 
+def connect_kbd():
+    lines = subprocess.check_output(['aconnect', '-lio'])
+    kbd = None
+    synth = None
+    r1 = re.compile(r"client (\d+): '([^']+)'")
+    for l in lines.splitlines():
+        m = r1.search(l)
+        if m:
+            if 'Keystation Mini 32' in m.group(2):
+                kbd = m.group(1)
+            if 'FLUID Synth' in m.group(2):
+                synth = m.group(1)
+    print("Found kbd:{} and synth:{}".format(kbd, synth))
+    if kbd and synth:
+        subprocess.call(['aconnect', kbd, synth])
+
+
 def stop_synth():
 
     print("Stopping fluidsyth")
@@ -343,6 +361,7 @@ def init(top, gui, *args, **kwargs):
 
     start_synth()
     dev = connect()
+    connect_kbd()
     for note in (36,38,42,51,53,65,78,79):
         drums.append(Drum(dev, note))
 
