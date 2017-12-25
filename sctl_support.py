@@ -294,9 +294,9 @@ def s_up():
     set_instr(instr)
 
 def kbd_event(event):
-    if event.char in '12345678':
+    id = '12345678'.find(event.char)
+    if id >= 0:
         try:
-            id = int(event.char) - 1
             drums[id].play()
         except ValueError:
             pass
